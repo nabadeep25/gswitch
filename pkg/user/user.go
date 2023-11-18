@@ -20,7 +20,7 @@ func AddUser(username, email string) {
 	fmt.Printf("Git user added: %s <%s>\n", username, email)
 }
 
-func ListUsers() {
+func ListUsers() helper.UserConfig {
 	config, err := helper.LoadConfig()
 	if err != nil {
 		fmt.Println("Error loading configuration:", err)
@@ -36,22 +36,10 @@ func ListUsers() {
 	for i, user := range config.Users {
 		fmt.Printf("%d: %s <%s>\n", i+1, user.Username, user.Email)
 	}
+	return config
 }
 func SelectUser() {
-	config, err := helper.LoadConfig()
-	if err != nil {
-		fmt.Println("Error loading configuration:", err)
-		os.Exit(1)
-	}
-
-	if len(config.Users) == 0 {
-		fmt.Println("No Git users found. Add a user using 'gswitch add' first.")
-		os.Exit(1)
-	}
-	fmt.Println("Select an active Git user:")
-	for i, user := range config.Users {
-		fmt.Printf("%d: %s <%s>\n", i+1, user.Username, user.Email)
-	}
+	config := ListUsers()
 	var selectedIndex int
 	fmt.Print("Enter the user key to select: ")
 	fmt.Scanln(&selectedIndex)
@@ -61,7 +49,7 @@ func SelectUser() {
 	}
 	user := config.Users[selectedIndex-1]
 	cmd := exec.Command("git", "config", "--global", "user.name", user.Username)
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		fmt.Println("Error setting active Git user:", err)
 		os.Exit(1)
@@ -73,4 +61,19 @@ func SelectUser() {
 		os.Exit(1)
 	}
 	fmt.Printf("Active Git user set to: %s <%s>\n", user.Username, user.Email)
+}
+
+func DeleteUser() {
+	config := ListUsers()
+	var selectedIndex int
+	fmt.Print("Enter the user key to remove: ")
+	fmt.Scanln(&selectedIndex)
+	if selectedIndex < 1 || selectedIndex > len(config.Users) {
+		fmt.Println("Invalid user index.")
+		os.Exit(1)
+	}
+	deletedUser := config.Users[selectedIndex-1]
+	config.Users = append(config.Users[:selectedIndex-1], config.Users[selectedIndex:]...)
+	helper.SaveConfig(config)
+	fmt.Printf("Removed user: %s <%s>\n", deletedUser.Username, deletedUser.Email)
 }
