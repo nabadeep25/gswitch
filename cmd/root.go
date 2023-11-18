@@ -9,7 +9,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "gswitch",
 	Short: "switch global git user",
-	Long: `The Git User Manager gswitch is a  convenient utility designed to 
+	Long: `Gswitch is a  convenient utility designed to 
 simplify the process of managing global Git user configurations on your 
 system. Whether you're working on multiple projects with different Git 
 accounts or collaborating with various teams, gswitch provides an intuitive
