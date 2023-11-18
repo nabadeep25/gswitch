@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -9,16 +8,21 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "gswitch",
-	Short: "It is a tool to switch git user easily",
-	Long:  ` It is a tool to switch git user easily`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hello")
-	},
+	Short: "switch global git user",
+	Long: `The Git User Manager gswitch is a  convenient utility designed to 
+simplify the process of managing global Git user configurations on your 
+system. Whether you're working on multiple projects with different Git 
+accounts or collaborating with various teams, gswitch provides an intuitive
+and efficient way to add, list, and select Git users globally.`,
 }
 
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+	err := rootCmd.Execute()
+	if err != nil {
 		os.Exit(1)
 	}
+}
+
+func init() {
+
 }

@@ -1,4 +1,4 @@
-module github.com/nabadeep25/git-user-switch
+module github.com/nabadeep25/gswitch
 
 go 1.21.3
 
