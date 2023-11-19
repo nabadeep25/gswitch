@@ -77,3 +77,32 @@ func DeleteUser() {
 	helper.SaveConfig(config)
 	fmt.Printf("Removed user: %s <%s>\n", deletedUser.Username, deletedUser.Email)
 }
+
+func UpdateUser() {
+	config := ListUsers()
+	var selectedIndex int
+	var username, email string
+	fmt.Print("Enter the user key to update: ")
+	fmt.Scanln(&selectedIndex)
+	if selectedIndex < 1 || selectedIndex > len(config.Users) {
+		fmt.Println("Invalid user index.")
+		os.Exit(1)
+	}
+	fmt.Printf("Current username: %s\n", config.Users[selectedIndex-1].Username)
+	fmt.Print("Enter updated username (press Enter to keep current): ")
+	fmt.Scanln(&username)
+
+	fmt.Printf("Current email: %s\n", config.Users[selectedIndex-1].Email)
+	fmt.Print("Enter updated email (press Enter to keep current): ")
+	fmt.Scanln(&email)
+	updatedUser := config.Users[selectedIndex-1]
+	if username != "" {
+		updatedUser.Username = username
+	}
+	if email != "" {
+		updatedUser.Email = email
+	}
+	config.Users[selectedIndex-1] = updatedUser
+	helper.SaveConfig(config)
+	fmt.Printf("Updated user: %s <%s>\n", updatedUser.Username, updatedUser.Email)
+}
